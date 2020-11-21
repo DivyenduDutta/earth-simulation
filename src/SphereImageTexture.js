@@ -163,7 +163,7 @@ class SphereImageTexture extends React.Component{
         const animate = (nowMsec) => {
             requestAnimationFrame(animate);
             var delta	= Math.min(200, nowMsec)/1000;
-            if(mesh != undefined || mesh != null){
+            if(mesh != undefined || mesh != null || cloudMesh != undefined || cloudMesh != null){
                
                 mesh.rotation.y = Date.now() * 0.0001;
                 cloudMesh.rotation.y = Date.now() * 0.00012;
