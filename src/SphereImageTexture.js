@@ -89,12 +89,13 @@ class SphereImageTexture extends React.Component{
         }
 
 
-         const loadSpecularMap = () => {
+         const loadSpecularMap = (callback) => {
             loader.load(specularImage,
                 function(texture){
                     console.log('loading specular texture');
                     material.specularMap = texture;
                     material.specular = new THREE.Color('grey');
+                    callback();
                 });
         }
 
