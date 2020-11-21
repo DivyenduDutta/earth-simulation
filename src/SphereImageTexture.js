@@ -49,107 +49,67 @@ class SphereImageTexture extends React.Component{
         });
 
         var loader = new THREE.TextureLoader();
-        loader.load(groundImage,
-            function(texture){
-                console.log('loading texture');
-                material.map = texture;
-            },
-            // Function called when download progresses
-            function ( xhr ) {
-                console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-            },
-            // Function called when download errors
-            function ( xhr ) {
-                console.log(xhr);
-                console.log( 'An error happened' );
-            }
-
-            
-        );
-
-        loader.load(specularImage,
-            function(texture){
-                console.log('loading specular texture');
-                material.specularMap = texture;
-                material.specular = new THREE.Color('grey');
-            },
-            // Function called when download progresses
-            function ( xhr ) {
-                console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-            },
-            // Function called when download errors
-            function ( xhr ) {
-                console.log(xhr);
-                console.log( 'An error happened' );
-            }
-
-            
-        );
-
-        loader.load(galaxyImage,
-            function(texture){
-                console.log('loading galaxy texture');
-                galaxyMaterial.map = texture;
-                galaxyMesh = new THREE.Mesh(galaxyGeometry, galaxyMaterial);
-                scene.add(galaxyMesh);
-            },
-            // Function called when download progresses
-            function ( xhr ) {
-                console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-            },
-            // Function called when download errors
-            function ( xhr ) {
-                console.log(xhr);
-                console.log( 'An error happened' );
-            }
-
-            
-        );
-
-        loader.load(bumpImage,
-            function(texture){
-                console.log('loading bump texture');
-                material.bumpMap = texture;
-                material.bumpScale = 5;
-                mesh = new THREE.Mesh(geometry, material);
-                
-                scene.add(mesh);
-            },
-            // Function called when download progresses
-            function ( xhr ) {
-                console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-            },
-            // Function called when download errors
-            function ( xhr ) {
-                console.log(xhr);
-                console.log( 'An error happened' );
-            }
-
-            
-        );
-
-        loader.load(cloudImage1,
-            function(texture){
-                console.log('loading cloud texture');
-                cloudMaterial.map = texture;
-                cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
-                scene.add(cloudMesh);
-            },
-            // Function called when download progresses
-            function ( xhr ) {
-                console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-            },
-            // Function called when download errors
-            function ( xhr ) {
-                console.log(xhr);
-                console.log( 'An error happened' );
-            }
-
-            
-        );
         
-        
-    
+        const loadTexturesStart = () => {
+            loadGroundMap(loadCloudMap);
+        }
+
+        const loadGroundMap = (callback) => {
+            loader.load(groundImage,
+                function(texture){
+                    console.log('loading texture');
+                    material.map = texture;
+                    callback(loadBumpMap);
+                }
+            );
+        }
+
+        const loadCloudMap = (callback) => {
+            loader.load(cloudImage1,
+                function(texture){
+                    console.log('loading cloud texture');
+                    cloudMaterial.map = texture;
+                    cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
+                    scene.add(cloudMesh);
+                    callback(loadSpecularMap);
+                });
+        }
+
+        const loadBumpMap = (callback) => {
+            loader.load(bumpImage,
+                function(texture){
+                    console.log('loading bump texture');
+                    material.bumpMap = texture;
+                    material.bumpScale = 5;
+                    mesh = new THREE.Mesh(geometry, material);
+                    
+                    scene.add(mesh);
+                    callback(loadGalaxyMap);
+                });
+        }
+
+
+         const loadSpecularMap = () => {
+            loader.load(specularImage,
+                function(texture){
+                    console.log('loading specular texture');
+                    material.specularMap = texture;
+                    material.specular = new THREE.Color('grey');
+                });
+        }
+
+        const loadGalaxyMap = () => {
+            loader.load(galaxyImage,
+                function(texture){
+                    console.log('loading galaxy texture');
+                    galaxyMaterial.map = texture;
+                    galaxyMesh = new THREE.Mesh(galaxyGeometry, galaxyMaterial);
+                    scene.add(galaxyMesh);
+                });
+        }
+
+        loadTexturesStart();
+
         camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 1, 1000);
         camera.position.z = 1.5;
 
