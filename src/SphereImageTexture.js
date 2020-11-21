@@ -133,7 +133,7 @@ class SphereImageTexture extends React.Component{
                 console.log('loading cloud texture');
                 cloudMaterial.map = texture;
                 cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
-                mesh.add(cloudMesh);
+                scene.add(cloudMesh);
             },
             // Function called when download progresses
             function ( xhr ) {
